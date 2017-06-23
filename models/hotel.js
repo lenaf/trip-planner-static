@@ -1,4 +1,4 @@
-const db = require('db')
+const db = require('./db')
 const Sequelize = require('sequelize');
 
 const Hotel = db.define('hotel', {
@@ -7,11 +7,14 @@ const Hotel = db.define('hotel', {
         allowNull: false
     },
     num_stars: {
-        type: Sequalize.FLOAT,
-        allowNull: false
+        type: Sequelize.FLOAT,
+        validate: {
+            max: 5,
+            min: 1
+        }
     },
     amenities: {
-        type: Sequelize.ARRAY(Sequalize.TEXT),
+        type: Sequelize.ARRAY(Sequelize.TEXT),
         defaultValue: [],
         set: function(amenities) {
             amenities = amenities || [];
@@ -26,3 +29,5 @@ const Hotel = db.define('hotel', {
 }, {
     getterMethods: {}
 });
+
+module.exports = Hotel;

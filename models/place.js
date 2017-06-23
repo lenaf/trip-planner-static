@@ -1,4 +1,4 @@
-const db = require('../db')
+const db = require('./db')
 const Sequelize = require('sequelize');
 
 const Place = db.define('place', {
@@ -7,21 +7,23 @@ const Place = db.define('place', {
         allowNull: false
     },
     city: {
-        type: Sequalize.TEXT,
+        type: Sequelize.TEXT,
         allowNull: false
     },
     state: {
-        type: Sequalize.TEXT,
+        type: Sequelize.TEXT,
         allowNull: false
     },
     phone: {
-        type: Sequalize.STRING,
+        type: Sequelize.STRING,
         allowNull: false
     },
     location: {
         type: Sequelize.ARRAY(Sequelize.FLOAT),
-        allowNull: false
+
     }
 }, {
     getterMethods: {}
 })
+
+module.exports = Place;
