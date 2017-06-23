@@ -5,6 +5,38 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
+  {% block content %}
   <h1>Welcome!</h1>
+  <h2>Hotels:</h2>
+    <select name="hotel">
+      
+        {% for hotels in templateHotels %}
+          <option>
+              {{ hotels.name }}
+          </option>
+
+        {% endfor %}
+    </select>
+     <h2>Restaurants:</h2>
+    <select name="restaurants">
+      
+        {% for restaurants in templateRestaurants %}
+          <option>
+              {{ restaurants.name }}
+          </option>
+
+        {% endfor %}
+    </select>
+     <h2>Activities:</h2>
+    <select name="activities">
+      
+        {% for activities in templateActivities %}
+          <option>
+              {{ activities.name }}
+          </option>
+
+        {% endfor %}
+    </select>
+  {% endblock %}
 </body>
 </html>
