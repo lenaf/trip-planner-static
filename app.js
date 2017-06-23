@@ -1,9 +1,13 @@
+//import our dependencies
+
 const express = require('express');
 const app = express();
-const db = require('./models');
+const { db, Activity, Hotel, Place, Restaurant } = require('./models');
 const volleyball = require('volleyball');
 const bodyParser = require('body-parser');
 const nunjucks = require('nunjucks');
+
+//logging, parsing, rendering middleware
 
 app.use(volleyball);
 
@@ -15,11 +19,36 @@ app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 nunjucks.configure('views', { noCache: true });
 
+
+//routes
+
 app.get('/', function(req, res, next) {
-    res.render('index');
+    var outerScopeContainer = {}; // holder for all data
+    Hotel.findAll()
+        .then(function(dbHotels) {
+            outerScopeContainer.dbHotels = dbHotels;
+            return Restaurant.findAll();
+        })
+        .then(function(dbRestaurants) {
+            outerScopeContainer.dbRestaurants = dbRestaurants;
+            return Activity.findAll();
+        })
+        .then(function(dbActivities) {
+            res.render('index', {
+                templateHotels: outerScopeContainer.dbHotels,
+                templateRestaurants: outerScopeContainer.dbRestaurants,
+                templateActivities: dbActivities
+            });
+        })
+        .catch(next);
+
 });
 
-// add routes here
+
+
+
+
+// error handling middleware
 
 app.use(function(req, res, next) {
     const err = new Error('That page doesn\'t exist!');
@@ -32,6 +61,8 @@ app.use(function(err, req, res, next) {
     console.log(err);
     res.status(err.status).render('error', { err: err });
 });
+
+//sync
 
 db.sync()
     .then(function() {
